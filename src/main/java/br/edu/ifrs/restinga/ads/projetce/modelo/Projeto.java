@@ -2,6 +2,7 @@
 package br.edu.ifrs.restinga.ads.projetce.modelo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
@@ -10,14 +11,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Lob;
+
 
 @Entity
-public class Projeto {
+public class Projeto implements Serializable{
 
 
     @Id
@@ -27,7 +31,7 @@ public class Projeto {
     @Column(nullable = false, length=60)
     private String nome;     
     
-    
+    @Lob
     private byte[] imagem;
     
     @Column(nullable = false, length=400)
@@ -48,29 +52,33 @@ public class Projeto {
     private Date dataFim;
     
     @ElementCollection    
-    @ManyToMany
+    @OneToMany
     private List<AreaInteresse> areaInteresse;    
     
     
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Usuario coordenadorProjeto;
     
     
     @ElementCollection
-    @ManyToMany
+    @ManyToMany(mappedBy = "projetosIntegrados")
     private List<Usuario> integrantesProjeto;
     
     
     @ElementCollection    
-    @OneToMany
+    @OneToMany(orphanRemoval=true)
     private List<Atividade> atividades;    
     
     
     @ElementCollection
     @OneToMany(mappedBy = "projeto")
+//    @OneToMany(mappedBy = "projeto", orphanRemoval=true)      //se for o caso de remover eventos quando o projeto for removido
     private List<Evento> eventos;
 
 
+    
+    
     public void setId(int id) throws Exception {
         if (id < 0)
             throw new Exception("Id deve ser maior que 1.");

@@ -2,6 +2,7 @@
 package br.edu.ifrs.restinga.ads.projetce.modelo;
 
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -13,7 +14,7 @@ import javax.persistence.OneToMany;
 
 
 @Entity
-public class Atividade {
+public class Atividade implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -29,10 +30,14 @@ public class Atividade {
     @Column(nullable = false,  columnDefinition = "boolean default true")
     private boolean permanente;
     
-    @ElementCollection    
-    @OneToMany
+    @ElementCollection
+    @OneToMany(orphanRemoval=true)
     private List<Programacao> programacoes;
 
+    
+    
+    
+    
     public void setId(int id) throws Exception {
         if (id < 0)
             throw new Exception("Id deve ser maior que 1.");

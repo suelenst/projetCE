@@ -3,6 +3,7 @@ package br.edu.ifrs.restinga.ads.projetce.modelo;
 
 
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -10,13 +11,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 
 @Entity
-public class Evento {
+public class Evento implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,17 +36,20 @@ public class Evento {
     @Column(nullable = false)
     private String descricao;
     
+    @Lob
     private byte[] arquivosAnexos;
     
     @ElementCollection
-    @ManyToMany
+    @OneToMany
     private List<AreaInteresse> areaInteresse;
     
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Usuario promotorEvento;
     
-    @ManyToMany
+    @ElementCollection
+    @ManyToMany(mappedBy = "eventosInscrito")
     private List<Usuario> inscritosEvento;
    
     
@@ -51,7 +57,8 @@ public class Evento {
     private Projeto projeto;
     
     
-    @OneToMany
+    @ElementCollection    
+    @OneToMany(orphanRemoval=true)
     private List<Programacao> programacoes;
 
 

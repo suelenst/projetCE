@@ -6,8 +6,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -19,6 +18,7 @@ public class Usuario extends Pessoa {
     @Column(length=60)
     private String apelido;
     
+    @Lob
     private byte[] imagem;
     
     @Column(nullable = false, length=20)
@@ -30,11 +30,11 @@ public class Usuario extends Pessoa {
     
     
     @ElementCollection
-    @ManyToMany  
-    @JoinTable(name="usuario_area_interesse", joinColumns=
-      {@JoinColumn(name="area_interesse_id", unique = false)}, inverseJoinColumns=
-        {@JoinColumn(name="usuario_id", unique = false)})
-    private List<AreaInteresse> areaInteresse;    
+    @OneToMany
+//    @JoinTable(name="usuario_area_interesse", joinColumns=
+//      {@JoinColumn(name="area_interesse_id", unique = false)}, inverseJoinColumns=
+//        {@JoinColumn(name="usuario_id", unique = false)} )
+    private List<AreaInteresse> areasInteresse;    
 
     @ElementCollection
     @OneToMany(mappedBy = "coordenadorProjeto")
@@ -52,6 +52,9 @@ public class Usuario extends Pessoa {
     @ManyToMany(mappedBy = "inscritosEvento")
     private List<Evento> eventosInscrito;
 
+    
+    
+    
 
     public void setApelido(String apelido) throws Exception {
         if (apelido.length() > 20)
@@ -78,12 +81,7 @@ public class Usuario extends Pessoa {
         else
             this.curso = curso;
     }
-    public void setAreaInteresse(List<AreaInteresse> areaInteresse) throws Exception {
-        if (areaInteresse == null || areaInteresse.isEmpty())
-            throw new Exception("É necessário cadastrar pelo menos uma área de interesse");
-        else 
-            this.areaInteresse = areaInteresse;
-    }
+
     public void setProjetosCoordenados(List<Projeto> projetosCoordenados) {
         this.projetosCoordenados = projetosCoordenados;
     }
@@ -112,9 +110,7 @@ public class Usuario extends Pessoa {
     public String getCurso() {
         return curso;
     }
-    public List<AreaInteresse> getAreaInteresse() {
-        return areaInteresse;
-    }
+
     public List<Projeto> getProjetosCoordenados() {
         return projetosCoordenados;
     }
