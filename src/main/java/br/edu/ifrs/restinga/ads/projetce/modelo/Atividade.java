@@ -2,15 +2,19 @@
 package br.edu.ifrs.restinga.ads.projetce.modelo;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
+ 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 @Entity
@@ -18,6 +22,10 @@ public class Atividade implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dataDelete;
     
     @Column(nullable = false, length=60)
     private String nome;
@@ -30,7 +38,7 @@ public class Atividade implements Serializable{
     @Column(nullable = false,  columnDefinition = "boolean default true")
     private boolean permanente;
     
-    @ElementCollection
+     
     @OneToMany(orphanRemoval=true)
     private List<Programacao> programacoes;
 

@@ -2,22 +2,30 @@
 package br.edu.ifrs.restinga.ads.projetce.modelo;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
+ 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 @Entity
 @PrimaryKeyJoinColumn(name="id")
 public class Usuario extends Pessoa {
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dataDelete;
+    
     @Column(length=60)
     private String apelido;
-    
+        
     @Lob
     private byte[] imagem;
     
@@ -29,26 +37,23 @@ public class Usuario extends Pessoa {
     
     
     
-    @ElementCollection
+     
     @OneToMany
-//    @JoinTable(name="usuario_area_interesse", joinColumns=
-//      {@JoinColumn(name="area_interesse_id", unique = false)}, inverseJoinColumns=
-//        {@JoinColumn(name="usuario_id", unique = false)} )
     private List<AreaInteresse> areasInteresse;    
 
-    @ElementCollection
+     
     @OneToMany(mappedBy = "coordenadorProjeto")
     private List<Projeto> projetosCoordenados;
         
-    @ElementCollection
+     
     @ManyToMany(mappedBy = "integrantesProjeto")
     private List<Projeto> projetosIntegrados;
     
-    @ElementCollection
+     
     @OneToMany(mappedBy = "promotorEvento")
     private List<Evento> eventosPromovidos;
 
-    @ElementCollection
+     
     @ManyToMany(mappedBy = "inscritosEvento")
     private List<Evento> eventosInscrito;
 

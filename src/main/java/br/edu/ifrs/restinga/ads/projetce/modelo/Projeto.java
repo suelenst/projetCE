@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
+ 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +27,10 @@ public class Projeto implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dataDelete;
     
     @Column(nullable = false, length=60)
     private String nome;     
@@ -51,7 +55,7 @@ public class Projeto implements Serializable{
     @Temporal(TemporalType.DATE)
     private Date dataFim;
     
-    @ElementCollection    
+         
     @OneToMany
     private List<AreaInteresse> areaInteresse;    
     
@@ -61,19 +65,18 @@ public class Projeto implements Serializable{
     private Usuario coordenadorProjeto;
     
     
-    @ElementCollection
-    @ManyToMany(mappedBy = "projetosIntegrados")
+     
+    @ManyToMany
     private List<Usuario> integrantesProjeto;
     
     
-    @ElementCollection    
+         
     @OneToMany(orphanRemoval=true)
     private List<Atividade> atividades;    
     
     
-    @ElementCollection
-    @OneToMany(mappedBy = "projeto")
-//    @OneToMany(mappedBy = "projeto", orphanRemoval=true)      //se for o caso de remover eventos quando o projeto for removido
+     
+    @OneToMany(mappedBy = "projeto", orphanRemoval=true)      //se for o caso de remover eventos quando o projeto for removido
     private List<Evento> eventos;
 
 

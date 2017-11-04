@@ -3,10 +3,12 @@ package br.edu.ifrs.restinga.ads.projetce.modelo;
 
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
+ 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +18,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 @Entity
@@ -24,6 +28,10 @@ public class Evento implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dataDelete;
     
     @Column(nullable = false, length=60)
     private String nome; 
@@ -39,7 +47,7 @@ public class Evento implements Serializable{
     @Lob
     private byte[] arquivosAnexos;
     
-    @ElementCollection
+     
     @OneToMany
     private List<AreaInteresse> areaInteresse;
     
@@ -48,8 +56,8 @@ public class Evento implements Serializable{
     @JoinColumn(nullable = false)
     private Usuario promotorEvento;
     
-    @ElementCollection
-    @ManyToMany(mappedBy = "eventosInscrito")
+     
+    @ManyToMany
     private List<Usuario> inscritosEvento;
    
     
@@ -57,7 +65,7 @@ public class Evento implements Serializable{
     private Projeto projeto;
     
     
-    @ElementCollection    
+         
     @OneToMany(orphanRemoval=true)
     private List<Programacao> programacoes;
 
