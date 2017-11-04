@@ -39,7 +39,7 @@ public class Usuario extends Pessoa {
     
      
     @OneToMany
-    private List<AreaInteresse> areasInteresse;    
+    private List<Area> areas;    
 
      
     @OneToMany(mappedBy = "coordenadorProjeto")

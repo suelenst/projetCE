@@ -49,7 +49,7 @@ public class Evento implements Serializable{
     
      
     @OneToMany
-    private List<AreaInteresse> areaInteresse;
+    private List<Area> areas;
     
 
     @ManyToOne
@@ -106,11 +106,11 @@ public class Evento implements Serializable{
         else 
             this.descricao = descricao;
     }
-    public void setAreaInteresse(List<AreaInteresse> areaInteresse) throws Exception {
-        if (areaInteresse == null || areaInteresse.isEmpty())
+    public void setAreas(List<Area> areas) throws Exception {
+        if (areas == null || areas.isEmpty())
             throw new Exception("É necessário cadastrar pelo menos uma área de interesse");
         else 
-            this.areaInteresse = areaInteresse;
+            this.areas = areas;
     }
     public void setPromotorEvento(Usuario promotorEvento) throws Exception {
         if (promotorEvento == null)
@@ -152,8 +152,8 @@ public class Evento implements Serializable{
     public byte[] getArquivosAnexos() {
         return arquivosAnexos;
     }
-    public List<AreaInteresse> getAreaInteresse() {
-        return areaInteresse;
+    public List<Area> getArea() {
+        return areas;
     }
     public Usuario getPromotorEvento() {
         return promotorEvento;

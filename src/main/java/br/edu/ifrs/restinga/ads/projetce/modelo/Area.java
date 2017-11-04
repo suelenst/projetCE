@@ -12,7 +12,7 @@ import javax.persistence.Id;
 
 
 @Entity
-public class AreaInteresse implements Serializable {
+public class Area implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
