@@ -26,11 +26,11 @@ public class Projeto implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    
+    private int id; 
+  
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private Date dataDelete;
+    private Date dataDelecao;
     
     @Column(nullable = false, length=60)
     private String nome;     
@@ -150,6 +150,13 @@ public class Projeto implements Serializable{
         this.eventos = eventos;
     }
 
+    public void setDataDelecao(Date dataDelecao) {
+        this.dataDelecao = dataDelecao;
+    }
+
+    
+    
+    
  
     public int getId() {
         return id;
@@ -190,6 +197,11 @@ public class Projeto implements Serializable{
     public List<Evento> getEventos() {
         return eventos;
     }
+    public Date getDataDelecao() {
+        return dataDelecao;
+    }
+
+
 
 
     

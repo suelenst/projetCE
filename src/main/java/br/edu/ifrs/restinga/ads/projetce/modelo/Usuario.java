@@ -19,9 +19,14 @@ import javax.persistence.TemporalType;
 @Entity
 @PrimaryKeyJoinColumn(name="id")
 public class Usuario extends Pessoa {
+    
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private Date dataDelete;
+    private Date dataInsercao;
+    
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dataDelecao;
     
     @Column(length=60)
     private String apelido;
@@ -101,6 +106,13 @@ public class Usuario extends Pessoa {
         this.eventosInscrito = eventosInscrito;
     }
     
+    public void setDataInsercao(Date dataInsercao) {
+        this.dataInsercao = dataInsercao;
+    }
+    public void setDataDelecao(Date dataDelecao) {
+        this.dataDelecao = dataDelecao;
+    }
+    
 
 
     public String getApelido() {
@@ -128,6 +140,15 @@ public class Usuario extends Pessoa {
     public List<Evento> getEventosInscrito() {
         return eventosInscrito;
     }
+ 
+    public Date getDataInsercao() {
+        return dataInsercao;
+    }
+    public Date getDataDelecao() {
+        return dataDelecao;
+    }
+ 
+
 
 
 

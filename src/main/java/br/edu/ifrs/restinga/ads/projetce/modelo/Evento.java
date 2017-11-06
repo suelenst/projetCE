@@ -31,7 +31,11 @@ public class Evento implements Serializable{
     
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private Date dataDelete;
+    private Date dataInsercao;
+    
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dataDelecao;
     
     @Column(nullable = false, length=60)
     private String nome; 
@@ -130,6 +134,13 @@ public class Evento implements Serializable{
         else 
             this.programacoes = programacoes;
     }
+    public void setDataInsercao(Date dataInsercao) {
+        this.dataInsercao = dataInsercao;
+    }
+    public void setDataDelecao(Date dataDelecao) {
+        this.dataDelecao = dataDelecao;
+    
+    }
     
     
     
@@ -167,6 +178,14 @@ public class Evento implements Serializable{
     public List<Programacao> getProgramacoes() {
         return programacoes;
     }
+    public Date getDataInsercao() {
+        return dataInsercao;
+    }
+
+    public Date getDataDelecao() {
+        return dataDelecao;
+    }
+
 
     
     

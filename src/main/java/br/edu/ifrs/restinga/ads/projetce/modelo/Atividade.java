@@ -22,11 +22,7 @@ public class Atividade implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.DATE)
-    private Date dataDelete;
-    
+
     @Column(nullable = false, length=60)
     private String nome;
     
