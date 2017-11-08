@@ -1,3 +1,5 @@
+package br.edu.ifrs.restinga.ads.projetce;
+
 //package br.edu.ifrs.restinga.ads.jezer.restExemplo;
 //
 //import org.junit.Test;
