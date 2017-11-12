@@ -47,7 +47,7 @@ public class Pessoa implements Serializable {
        
     }
     public void setSenha(String senha) throws Exception {
-        if (getNome() == null || getNome().isEmpty())
+        if (senha == null || senha.isEmpty())
             throw new Exception("O campo senha é de preenchimento obrigatório.");
         else
             this.senha = senha;
@@ -67,8 +67,6 @@ public class Pessoa implements Serializable {
             this.telefone = telefone;
     }
 
-
-    
     public int getId() {
         return id;
     }
@@ -84,11 +82,5 @@ public class Pessoa implements Serializable {
     public String getTelefone() {
         return telefone;
     }
-    
-    
 
-
-
-    
-       
 }

@@ -62,9 +62,9 @@ public class Usuario extends Pessoa {
     @ManyToMany(mappedBy = "inscritosEvento")
     private List<Evento> eventosInscrito;
 
-    
-    
-    
+
+
+
 
     public void setApelido(String apelido) throws Exception {
         if (apelido.length() > 20)
