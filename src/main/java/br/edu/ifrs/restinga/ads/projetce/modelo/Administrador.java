@@ -4,14 +4,21 @@ package br.edu.ifrs.restinga.ads.projetce.modelo;
 
 
 import br.edu.ifrs.restinga.ads.projetce.util.Utilitarios;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Transient;
 
 
 @Entity
-@PrimaryKeyJoinColumn(name="id")
+//@PrimaryKeyJoinColumn(name="id")
 public class Administrador extends Pessoa {
+    // Para não gravar no banco 
+    @Transient
+    // Define o campo
+    @JsonProperty("tipo")
+    private final String tipo = "fisica";
 
     @Column(unique = true, nullable = false, length=11)
     private String cpf;

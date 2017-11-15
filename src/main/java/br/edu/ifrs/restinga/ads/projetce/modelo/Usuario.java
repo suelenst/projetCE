@@ -3,6 +3,7 @@ package br.edu.ifrs.restinga.ads.projetce.modelo;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
@@ -14,11 +15,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 
 @Entity
-@PrimaryKeyJoinColumn(name="id")
+//@PrimaryKeyJoinColumn(name="id")
 public class Usuario extends Pessoa {
+    
+    // Para não gravar no banco 
+    @Transient
+    // Define o campo
+    @JsonProperty("tipo")
+    private final String tipo = "fisica";
     
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)

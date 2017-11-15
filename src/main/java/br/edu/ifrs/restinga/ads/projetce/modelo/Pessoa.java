@@ -2,6 +2,10 @@
 package br.edu.ifrs.restinga.ads.projetce.modelo;
 
 import br.edu.ifrs.restinga.ads.projetce.util.Utilitarios;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,11 +14,30 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Transient;
 
 
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Pessoa implements Serializable {
+    @Entity
+    @Inheritance(strategy = InheritanceType.JOINED)
+    // Configurando herança 
+    @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, 
+        include=JsonTypeInfo.As.EXISTING_PROPERTY, property="tipo")
+    // define o tipo raiz 
+    @JsonTypeName("pessoa")
+    // tem que definir as subclasses conhecidas 
+    @JsonSubTypes({
+            @JsonSubTypes.Type(name="usuario", value=Usuario.class),
+            @JsonSubTypes.Type(name="administrador", value=Administrador.class)})
+    
+    
+public abstract class Pessoa implements Serializable {
+    
+    // para não gravar no banco 
+    @Transient
+    // Define o campo
+    @JsonProperty("tipo")
+    private final String tipo = "pessoa";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
