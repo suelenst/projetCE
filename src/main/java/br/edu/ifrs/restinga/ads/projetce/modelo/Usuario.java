@@ -26,7 +26,7 @@ public class Usuario extends Pessoa {
     @Transient
     // Define o campo
     @JsonProperty("tipo")
-    private final String tipo = "fisica";
+    private final String tipo = "usuario";
     
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)

@@ -18,7 +18,7 @@ public class Administrador extends Pessoa {
     @Transient
     // Define o campo
     @JsonProperty("tipo")
-    private final String tipo = "fisica";
+    private final String tipo = "administrador";
 
     @Column(unique = true, nullable = false, length=11)
     private String cpf;
