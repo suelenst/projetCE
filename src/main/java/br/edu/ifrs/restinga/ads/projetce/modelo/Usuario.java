@@ -13,9 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 
@@ -28,14 +25,6 @@ public class Usuario extends Pessoa {
     // Define o campo
     @JsonProperty("tipo")
     private final String tipo = "usuario";
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.DATE)
-    private Date dataInsercao;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.DATE)
-    private Date dataDelecao;
 
     @Column(length = 60)
     private String apelido;
@@ -115,14 +104,6 @@ public class Usuario extends Pessoa {
         this.eventosInscrito = eventosInscrito;
     }
 
-    public void setDataInsercao(Date dataInsercao) {
-        this.dataInsercao = dataInsercao;
-    }
-
-    public void setDataDelecao(Date dataDelecao) {
-        this.dataDelecao = dataDelecao;
-    }
-
 
     public String getApelido() {
         return apelido;
@@ -156,12 +137,5 @@ public class Usuario extends Pessoa {
         return eventosInscrito;
     }
 
-    public Date getDataInsercao() {
-        return dataInsercao;
-    }
-
-    public Date getDataDelecao() {
-        return dataDelecao;
-    }
 
 }

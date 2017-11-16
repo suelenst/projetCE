@@ -2,12 +2,14 @@
 package br.edu.ifrs.restinga.ads.projetce.modelo;
 
 import br.edu.ifrs.restinga.ads.projetce.util.Utilitarios;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +17,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 
@@ -43,6 +47,14 @@ public abstract class Pessoa implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dataInsercao = new Date(System.currentTimeMillis());;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dataDelecao;
+    
     @Column(unique = true, nullable = false, length = 255)
     private String email;
 
@@ -57,13 +69,15 @@ public abstract class Pessoa implements Serializable {
 
     public void setId(int id) throws Exception {
         if (id < 0)
-            throw new Exception("Id deve ser maior que 1.");
+            throw new Exception("Id deve ser maior que 0.");
         else
             this.id = id;
     }
 
-    public void setEmail(String email) throws Exception {
-        if (email == null || email.isEmpty())
+    public void setEmail(String prefixo) throws Exception {
+        String email = prefixo + "@restinga.ifrs.edu.br";
+        
+        if (prefixo == null || prefixo.isEmpty())
             throw new Exception("O campo E-mail é de preenchimento obrigatório!");
         else if (!new Utilitarios().validaEmail(email))
             throw new Exception("O E-mail digitado não é válido!");
@@ -94,6 +108,15 @@ public abstract class Pessoa implements Serializable {
         else
             this.telefone = telefone;
     }
+    
+    public void setDataInsercao(Date dataInsercao) {
+        this.dataInsercao = dataInsercao;
+    }
+    public void setDataDelecao(Date dataDelecao) {
+        this.dataDelecao = dataDelecao;
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -110,9 +133,17 @@ public abstract class Pessoa implements Serializable {
     public String getNome() {
         return nome;
     }
-
     public String getTelefone() {
         return telefone;
     }
+    public Date getDataInsercao() {
+        return dataInsercao;
+    }
+
+    public Date getDataDelecao() {
+        return dataDelecao;
+    }
+
+
 
 }

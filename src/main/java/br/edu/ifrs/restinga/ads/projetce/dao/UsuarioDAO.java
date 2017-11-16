@@ -12,5 +12,7 @@ public interface UsuarioDAO extends PagingAndSortingRepository<Usuario, Integer>
     Page<Usuario> findByNome(String nome, Pageable pageable);
 
     Page<Usuario> findByNomeContainingOrderByNome(String nome, Pageable pageable);
+    
+    Page<Usuario> findAllByDataDelecaoIsNull(Pageable pageable);
 
 }

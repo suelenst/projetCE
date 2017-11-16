@@ -31,7 +31,7 @@ public class Usuarios {
     @RequestMapping(path = "", method = RequestMethod.GET)
     public Iterable<Usuario> listar(@RequestParam(required = false, defaultValue = "0") int pagina) {
         PageRequest pageRequest = new PageRequest(pagina, 5);
-        return usuarioDAO.findAll(pageRequest);
+        return usuarioDAO.findAllByDataDelecaoIsNull(pageRequest);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
