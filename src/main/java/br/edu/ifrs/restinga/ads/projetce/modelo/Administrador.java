@@ -27,8 +27,8 @@ public class Administrador extends Pessoa {
     public void setCpf(String cpf) throws Exception {
         if (cpf == null || cpf.isEmpty())
             throw new Exception("O campo cpf é de preenchimento obrigatório.");    
-//        else if (new Utilitarios().validaCPF(cpf) == false)
-//            throw new Exception("O cpf informado não é válido!");
+      else if (!new Utilitarios().validaCPF(cpf))
+            throw new Exception("O cpf informado não é válido!");
         else
             this.cpf = cpf;
     }

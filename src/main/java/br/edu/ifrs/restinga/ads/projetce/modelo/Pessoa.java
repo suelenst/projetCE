@@ -79,8 +79,8 @@ public abstract class Pessoa implements Serializable {
         
         if (prefixo == null || prefixo.isEmpty())
             throw new Exception("O campo E-mail é de preenchimento obrigatório!");
-//        else if (!new Utilitarios().validaEmail(email))
-//            throw new Exception("O E-mail digitado não é válido!");
+        else if (!new Utilitarios().validaEmail(email+"@restinga.ifrs.edu.br"))
+            throw new Exception("O E-mail digitado não é válido!");
         else
             this.email =prefixo;
     }

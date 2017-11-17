@@ -23,7 +23,6 @@ public class Utilitarios {
         return matcher.matches();
     }
 
-
     public boolean validaCPF(String CPF) throws Exception {
         if (CPF.equals("00000000000") || CPF.equals("11111111111") ||
                 CPF.equals("22222222222") || CPF.equals("33333333333") ||
@@ -35,7 +34,6 @@ public class Utilitarios {
 
         char dig10, dig11;
         int sm, i, r, num, peso;
-
 
         try {
             // Calculo do 1o. Digito Verificador
