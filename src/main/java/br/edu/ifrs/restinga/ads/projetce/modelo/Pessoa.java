@@ -82,7 +82,7 @@ public abstract class Pessoa implements Serializable {
         else if (!new Utilitarios().validaEmail(email))
             throw new Exception("O E-mail digitado não é válido!");
         else
-            this.email = email;
+            this.email =prefixo;
 
     }
 
@@ -123,7 +123,7 @@ public abstract class Pessoa implements Serializable {
     }
 
     public String getEmail() {
-        return email;
+        return email + "@restinga.ifrs.edu.br";
     }
 
     public String getSenha() {
