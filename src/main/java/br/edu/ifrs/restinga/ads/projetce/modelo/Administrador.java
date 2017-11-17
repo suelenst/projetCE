@@ -20,15 +20,15 @@ public class Administrador extends Pessoa {
     @JsonProperty("tipo")
     private final String tipo = "administrador";
 
-    @Column(unique = true, nullable = false, length=11)
+    @Column(unique = true, nullable = false, length=14)
     private String cpf;
 
 
     public void setCpf(String cpf) throws Exception {
         if (cpf == null || cpf.isEmpty())
             throw new Exception("O campo cpf é de preenchimento obrigatório.");    
-        else if (new Utilitarios().validaCPF(cpf) == false)
-            throw new Exception("O cpf informado não é válido!");        
+//        else if (new Utilitarios().validaCPF(cpf) == false)
+//            throw new Exception("O cpf informado não é válido!");
         else
             this.cpf = cpf;
     }
