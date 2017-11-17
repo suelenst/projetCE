@@ -75,15 +75,14 @@ public abstract class Pessoa implements Serializable {
     }
 
     public void setEmail(String prefixo) throws Exception {
-        String email = prefixo + "@restinga.ifrs.edu.br";
+        String email = prefixo;
         
         if (prefixo == null || prefixo.isEmpty())
             throw new Exception("O campo E-mail é de preenchimento obrigatório!");
-        else if (!new Utilitarios().validaEmail(email))
-            throw new Exception("O E-mail digitado não é válido!");
+//        else if (!new Utilitarios().validaEmail(email))
+//            throw new Exception("O E-mail digitado não é válido!");
         else
             this.email =prefixo;
-
     }
 
     public void setSenha(String senha) throws Exception {
@@ -123,7 +122,7 @@ public abstract class Pessoa implements Serializable {
     }
 
     public String getEmail() {
-        return email + "@restinga.ifrs.edu.br";
+        return email;
     }
 
     public String getSenha() {
