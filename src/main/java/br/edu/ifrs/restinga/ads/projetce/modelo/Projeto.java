@@ -2,6 +2,7 @@
 package br.edu.ifrs.restinga.ads.projetce.modelo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -75,7 +76,7 @@ public class Projeto implements Serializable{
     private List<Atividade> atividades;    
     
     
-     
+    @JsonIgnore  
     @OneToMany(mappedBy = "projeto", orphanRemoval=true)      //se for o caso de remover eventos quando o projeto for removido
     private List<Evento> eventos;
 

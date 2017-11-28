@@ -3,6 +3,7 @@ package br.edu.ifrs.restinga.ads.projetce.modelo;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
@@ -40,19 +41,20 @@ public class Usuario extends Pessoa {
 
     @OneToMany
     private List<Area> areas;
-
+    
+    @JsonIgnore 
     @OneToMany(mappedBy = "coordenadorProjeto")
     private List<Projeto> projetosCoordenados;
 
-
+    @JsonIgnore 
     @ManyToMany(mappedBy = "integrantesProjeto")
     private List<Projeto> projetosIntegrados;
 
-
+    @JsonIgnore 
     @OneToMany(mappedBy = "promotorEvento")
     private List<Evento> eventosPromovidos;
 
-
+    @JsonIgnore 
     @ManyToMany(mappedBy = "inscritosEvento")
     private List<Evento> eventosInscrito;
 
