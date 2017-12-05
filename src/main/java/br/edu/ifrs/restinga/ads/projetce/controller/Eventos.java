@@ -8,13 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/eventos")
+@RequestMapping(path = "/api")
 public class Eventos {
 
     @Autowired
     EventoDAO eventoDAO;
 
-    @RequestMapping(path = "/pesquisar/nome", method = RequestMethod.GET)
+    @RequestMapping(path = "/eventos/pesquisar/nome", method = RequestMethod.GET)
     public Iterable<Evento> pesquisaPorNome(
             @RequestParam(required = false) String igual,
             @RequestParam(required = false) String contem,
@@ -27,24 +27,24 @@ public class Eventos {
         }
     }
 
-    @RequestMapping(path = "/pesquisar", method = RequestMethod.GET)
+    @RequestMapping(path = "/eventos", method = RequestMethod.GET)
     public Iterable<Evento> listar() {
         return eventoDAO.findAll();
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/eventos/{id}", method = RequestMethod.GET)
     public Evento recuperar(@PathVariable int id) {
         return eventoDAO.findOne(id);
     }
 
-    @RequestMapping(path = "", method = RequestMethod.POST)
+    @RequestMapping(path = "/eventos", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public Evento inserir(@RequestBody Evento evento) throws Exception {
         evento.setId(0);
         return eventoDAO.save(evento);
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/eventos/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void apagar(@PathVariable int id) {
         if (eventoDAO.exists(id)) {
@@ -52,7 +52,7 @@ public class Eventos {
         }
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/eventos/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void atualizar(@PathVariable int id, @RequestBody Evento evento) throws Exception {
         if (eventoDAO.exists(id)) {

@@ -8,13 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/projetos")
+@RequestMapping(path = "/api")
 public class Projetos {
 
     @Autowired
     ProjetoDAO projetoDAO;
 
-    @RequestMapping(path = "/pesquisar/nome", method = RequestMethod.GET)
+    @RequestMapping(path = "/projetos/pesquisar/nome", method = RequestMethod.GET)
     public Iterable<Projeto> pesquisaPorNome(
             @RequestParam(required = false) String igual,
             @RequestParam(required = false) String contem,
@@ -27,24 +27,24 @@ public class Projetos {
         }
     }
 
-    @RequestMapping(path = "/pesquisar", method = RequestMethod.GET)
+    @RequestMapping(path = "/projetos", method = RequestMethod.GET)
     public Iterable<Projeto> listar() {
         return projetoDAO.findAll();
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/projetos/{id}", method = RequestMethod.GET)
     public Projeto recuperar(@PathVariable int id) {
         return projetoDAO.findOne(id);
     }
 
-    @RequestMapping(path = "", method = RequestMethod.POST)
+    @RequestMapping(path = "/projetos", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public Projeto inserir(@RequestBody Projeto projeto) throws Exception {
         projeto.setId(0);
         return projetoDAO.save(projeto);
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/projetos/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void apagar(@PathVariable int id) {
         if (projetoDAO.exists(id)) {
@@ -52,7 +52,7 @@ public class Projetos {
         }
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/projetos/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void atualizar(@PathVariable int id, @RequestBody Projeto projeto) throws Exception {
         if (projetoDAO.exists(id)) {

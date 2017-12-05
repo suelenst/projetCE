@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.ifrs.restinga.ads.projetce.dao.AreaDAO;
 
 @RestController
-@RequestMapping(path = "/areas")
+@RequestMapping(path = "/api")
 public class Areas {
 
     @Autowired
     AreaDAO areaDAO;
 
-    @RequestMapping(path = "/pesquisar/nome", method = RequestMethod.GET)
+    @RequestMapping(path = "/areas/pesquisar/nome", method = RequestMethod.GET)
     public Iterable<Area> pesquisaPorNome(
             @RequestParam(required = false) String igual,
             @RequestParam(required = false) String contem,
@@ -33,13 +33,13 @@ public class Areas {
         }
     }
 
-    @RequestMapping(path = "", method = RequestMethod.GET)
+    @RequestMapping(path = "/areas", method = RequestMethod.GET)
     public Iterable<Area> listar(@RequestParam(required = false, defaultValue = "0") int pagina) {
         PageRequest pageRequest = new PageRequest(pagina, 5);
         return areaDAO.findAll(pageRequest);
     }
 
-    @RequestMapping(path = "", method = RequestMethod.POST)
+    @RequestMapping(path = "/areas", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public Area inserir(@RequestBody Area area) throws Exception {
         area.setId(0);
@@ -47,12 +47,12 @@ public class Areas {
         return areaSalvo;
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/areas/{id}", method = RequestMethod.GET)
     public Area recuperar(@PathVariable int id) {
         return areaDAO.findOne(id);
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/areas/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void atualizar(@PathVariable int id, @RequestBody Area area) throws Exception {
         if (areaDAO.exists(id)) {
@@ -61,7 +61,7 @@ public class Areas {
         }
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/areas/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void apagar(@PathVariable int id) {
         if (areaDAO.exists(id)) {

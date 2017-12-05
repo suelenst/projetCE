@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping(path = "/usuarios")
+@RequestMapping(path = "/api")
 public class Usuarios {
 
     @Autowired
     UsuarioDAO usuarioDAO;
 
-    @RequestMapping(path = "/pesquisar/nome", method = RequestMethod.GET)
+    @RequestMapping(path = "/usuarios/pesquisar/nome", method = RequestMethod.GET)
     public Iterable<Usuario> pesquisaPorNome(
             @RequestParam(required = false) String igual,
             @RequestParam(required = false) String contem,
@@ -28,25 +28,25 @@ public class Usuarios {
         }
     }
 
-    @RequestMapping(path = "", method = RequestMethod.GET)
+    @RequestMapping(path = "/usuarios", method = RequestMethod.GET)
     public Iterable<Usuario> listar(@RequestParam(required = false, defaultValue = "0") int pagina) {
         PageRequest pageRequest = new PageRequest(pagina, 5);
         return usuarioDAO.findAllByDataDelecaoIsNull(pageRequest);
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/usuarios/{id}", method = RequestMethod.GET)
     public Usuario recuperar(@PathVariable int id) {
         return usuarioDAO.findOne(id);
     }
 
-    @RequestMapping(path = "", method = RequestMethod.POST)
+    @RequestMapping(path = "/usuarios", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public Usuario inserir(@RequestBody Usuario usuario) throws Exception {
         usuario.setId(0);
         return usuarioDAO.save(usuario);
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/usuarios/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void apagar(@PathVariable int id) {
         if (usuarioDAO.exists(id)) {
@@ -54,7 +54,7 @@ public class Usuarios {
         }
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/usuarios/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void atualizar(@PathVariable int id, @RequestBody Usuario usuario) throws Exception {
         if (usuarioDAO.exists(id)) {

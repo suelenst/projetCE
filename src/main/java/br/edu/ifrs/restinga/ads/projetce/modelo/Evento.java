@@ -42,10 +42,10 @@ public class Evento implements Serializable{
     
     private byte[] imagem;
     
-    @Column(nullable = false, length=400)
+    @Column(nullable = false, length=400, columnDefinition="TEXT")
     private String resumo;
     
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition="TEXT")
     private String descricao;
     
     @Lob

@@ -30,8 +30,6 @@ public class Usuario extends Pessoa {
     @Column(length = 60)
     private String apelido;
 
-    @Lob
-    private byte[] imagem;
 
     @Column(nullable = false, length = 20)
     private String tipoVinculo;
@@ -66,9 +64,6 @@ public class Usuario extends Pessoa {
             this.apelido = apelido;
     }
 
-    public void setImagem(byte[] imagem) {
-        this.imagem = imagem;
-    }
 
     public void setTipoVinculo(String tipoVinculo) throws Exception {
         if (tipoVinculo == null || tipoVinculo.isEmpty())
@@ -111,9 +106,6 @@ public class Usuario extends Pessoa {
         return apelido;
     }
 
-    public byte[] getImagem() {
-        return imagem;
-    }
 
     public String getTipoVinculo() {
         return tipoVinculo;

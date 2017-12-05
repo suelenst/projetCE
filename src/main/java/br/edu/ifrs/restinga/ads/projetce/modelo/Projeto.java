@@ -39,10 +39,10 @@ public class Projeto implements Serializable{
     @Lob
     private byte[] imagem;
     
-    @Column(nullable = false, length=400)
+    @Column(nullable = false, length=400, columnDefinition="TEXT")
     private String resumo;
     
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition="TEXT")
     private String descricao;
     
     private byte[] arquivosAnexos;
