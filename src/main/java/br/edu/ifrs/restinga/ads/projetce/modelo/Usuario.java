@@ -5,6 +5,7 @@ package br.edu.ifrs.restinga.ads.projetce.modelo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.util.Date;
 import java.util.List;
@@ -18,10 +19,13 @@ import javax.persistence.Transient;
 
 
 @Entity
-//@PrimaryKeyJoinColumn(name="id")
+
+@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.PROPERTY, property="tipo")
+
 public class Usuario extends Pessoa {
 
     // Para não gravar no banco 
+    
     @Transient
     // Define o campo
     @JsonProperty("tipo")

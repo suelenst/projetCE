@@ -32,7 +32,7 @@ import javax.persistence.Transient;
 @Inheritance(strategy = InheritanceType.JOINED)
 // Configurando herança
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "tipo")
+        include = JsonTypeInfo.As.PROPERTY, property = "tipo")
 // define o tipo raiz
 @JsonTypeName("pessoa")
 // tem que definir as subclasses conhecidas
@@ -42,11 +42,7 @@ import javax.persistence.Transient;
 
 public abstract class Pessoa implements Serializable {
 
-    // para não gravar no banco 
-    @Transient
-    // Define o campo
-    @JsonProperty("tipo")
-    private String tipo = "pessoa";
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -138,9 +134,7 @@ public abstract class Pessoa implements Serializable {
     }
     
     
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+
     
     public void setNovaSenha(String novaSenha) {
         this.novaSenha = novaSenha;
@@ -185,9 +179,7 @@ public abstract class Pessoa implements Serializable {
     public Date getDataDelecao() {
         return dataDelecao;
     }
-    public String getTipo() {
-        return tipo;
-    }
+
     public String getNovaSenha() {
         return novaSenha;
     }

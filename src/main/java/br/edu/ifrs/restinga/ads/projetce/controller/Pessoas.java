@@ -8,6 +8,7 @@ package br.edu.ifrs.restinga.ads.projetce.controller;
 import br.edu.ifrs.restinga.ads.projetce.aut.ForbiddenException;
 import br.edu.ifrs.restinga.ads.projetce.aut.PessoaAut;
 import br.edu.ifrs.restinga.ads.projetce.dao.PessoaDAO;
+import br.edu.ifrs.restinga.ads.projetce.modelo.Administrador;
 import br.edu.ifrs.restinga.ads.projetce.modelo.Pessoa;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -49,13 +50,16 @@ public class Pessoas {
     public Pessoa inserir(@AuthenticationPrincipal PessoaAut pessoaAut, @RequestBody Pessoa pessoa) throws Exception {
         pessoa.setId(0);
         pessoa.setSenha(PASSWORD_ENCODER.encode(pessoa.getNovaSenha()));
-//        pessoa.setSenha(pessoa.getNovaSenha());
 
-        if (pessoaAut == null || !pessoaAut.getPessoa().getPermissoes().contains("administrador")) {
-            ArrayList<String> permissao = new ArrayList<String>();
-            permissao.add("pessoa");
-            pessoa.setPermissoes(permissao);
-        }
+        
+        
+//        if (pessoaAut == null || !pessoaAut.getPessoa().getPermissoes().contains("administrador")) {  
+//            ArrayList<String> permissao = new ArrayList<String>();
+//            permissao.add("usuario");           
+//            pessoa.setPermissoes(permissao);
+//        }
+        
+        
         Pessoa pessoaSalvo = pessoaDAO.save(pessoa);
         return pessoaSalvo;
     }
@@ -63,7 +67,7 @@ public class Pessoas {
     @Autowired
     PessoaDAO pessoaDAO;
 
-    @PreAuthorize("hasAuthority('administrador')")
+//    @PreAuthorize("hasAuthority('administrador')")
     @RequestMapping(path = "/pessoas", method = RequestMethod.GET)
     public Iterable<Pessoa> listar(@RequestParam(required = false, defaultValue = "0") int pagina) {
         PageRequest pageRequest = new PageRequest(pagina, 5);
