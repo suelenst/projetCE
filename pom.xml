@@ -56,6 +56,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <dependency>
+            <groupId>jca</groupId>
+            <artifactId>jca</artifactId>
+            <version>1.5</version>
+        </dependency>
 
     </dependencies>
 

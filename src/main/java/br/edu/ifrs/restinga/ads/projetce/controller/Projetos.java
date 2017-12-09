@@ -1,6 +1,7 @@
 package br.edu.ifrs.restinga.ads.projetce.controller;
 
 import br.edu.ifrs.restinga.ads.projetce.dao.ProjetoDAO;
+import br.edu.ifrs.restinga.ads.projetce.modelo.Area;
 import br.edu.ifrs.restinga.ads.projetce.modelo.Projeto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -28,8 +29,9 @@ public class Projetos {
     }
 
     @RequestMapping(path = "/projetos", method = RequestMethod.GET)
-    public Iterable<Projeto> listar() {
-        return projetoDAO.findAll();
+    public Iterable<Projeto> listar(@RequestParam(required = false, defaultValue = "0") int pagina) {
+        PageRequest pageRequest = new PageRequest(pagina, 5);
+        return projetoDAO.findAll(pageRequest);
     }
 
     @RequestMapping(path = "/projetos/{id}", method = RequestMethod.GET)

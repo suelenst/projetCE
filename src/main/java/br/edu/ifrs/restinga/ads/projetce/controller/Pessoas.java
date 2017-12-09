@@ -10,11 +10,13 @@ import br.edu.ifrs.restinga.ads.projetce.aut.PessoaAut;
 import br.edu.ifrs.restinga.ads.projetce.dao.PessoaDAO;
 import br.edu.ifrs.restinga.ads.projetce.modelo.Administrador;
 import br.edu.ifrs.restinga.ads.projetce.modelo.Pessoa;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.PageRequest;
@@ -35,10 +37,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- *
- * @author jezer
- */
+
 @RestController
 @RequestMapping(path = "/api")
 public class Pessoas {
@@ -51,15 +50,14 @@ public class Pessoas {
         pessoa.setId(0);
         pessoa.setSenha(PASSWORD_ENCODER.encode(pessoa.getNovaSenha()));
 
-        
-        
+
 //        if (pessoaAut == null || !pessoaAut.getPessoa().getPermissoes().contains("administrador")) {  
 //            ArrayList<String> permissao = new ArrayList<String>();
 //            permissao.add("usuario");           
 //            pessoa.setPermissoes(permissao);
 //        }
-        
-        
+
+
         Pessoa pessoaSalvo = pessoaDAO.save(pessoa);
         return pessoaSalvo;
     }
@@ -67,7 +65,7 @@ public class Pessoas {
     @Autowired
     PessoaDAO pessoaDAO;
 
-//    @PreAuthorize("hasAuthority('administrador')")
+    //    @PreAuthorize("hasAuthority('administrador')")
     @RequestMapping(path = "/pessoas", method = RequestMethod.GET)
     public Iterable<Pessoa> listar(@RequestParam(required = false, defaultValue = "0") int pagina) {
         PageRequest pageRequest = new PageRequest(pagina, 5);
@@ -106,21 +104,12 @@ public class Pessoas {
     @RequestMapping(path = "/pessoas/login", method = RequestMethod.GET)
     public Pessoa login(@AuthenticationPrincipal PessoaAut pessoaAut) {
         return pessoaAut.getPessoa();
-    
-    } 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    }
+
+
     @RequestMapping(path = "/pessoas/{id}/foto", method = RequestMethod.POST)
-    public void inserirFoto(@PathVariable int id, 
-            @RequestParam("arquivo") MultipartFile uploadfiles) {
+    public void inserirFoto(@PathVariable int id,
+                            @RequestParam("arquivo") MultipartFile uploadfiles) {
         Pessoa pessoa = pessoaDAO.findOne(id);
 
         try {
@@ -129,7 +118,7 @@ public class Pessoas {
             pessoaDAO.save(pessoa);
 
         } catch (IOException ex) {
-           ex.printStackTrace();
+            ex.printStackTrace();
         }
     }
 
@@ -142,7 +131,7 @@ public class Pessoas {
         }
         HttpHeaders respHeaders = new HttpHeaders();
         respHeaders.setContentType(MediaType.valueOf(pessoa.getTipoFoto()));
-        InputStreamResource img = 
+        InputStreamResource img =
                 new InputStreamResource(new ByteArrayInputStream(pessoa.getFoto()));
         return new ResponseEntity<InputStreamResource>(img, respHeaders, HttpStatus.OK);
     }
