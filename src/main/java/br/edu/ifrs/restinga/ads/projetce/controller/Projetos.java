@@ -28,6 +28,14 @@ public class Projetos {
         }
     }
 
+    @RequestMapping(path = "/projetos/coordenador/{id}", method = RequestMethod.GET)
+    public Iterable<Projeto> pesquisaPorCoordenador(
+            @PathVariable int id,
+            @RequestParam(required = false, defaultValue = "0") int pagina) {
+        PageRequest pageRequest = new PageRequest(pagina, 5);
+        return projetoDAO.findByCoordenadorProjeto_Id(id, pageRequest);
+    }
+
     @RequestMapping(path = "/projetos", method = RequestMethod.GET)
     public Iterable<Projeto> listar(@RequestParam(required = false, defaultValue = "0") int pagina) {
         PageRequest pageRequest = new PageRequest(pagina, 5);

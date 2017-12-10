@@ -1,6 +1,7 @@
 package br.edu.ifrs.restinga.ads.projetce.dao;
 
 import br.edu.ifrs.restinga.ads.projetce.modelo.Projeto;
+import br.edu.ifrs.restinga.ads.projetce.modelo.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -12,5 +13,7 @@ public interface ProjetoDAO extends PagingAndSortingRepository<Projeto, Integer>
     Page<Projeto> findByNome(String nome, Pageable pageable);
 
     Page<Projeto> findByNomeContainingOrderByNome(String nome, Pageable pageable);
+
+    Page<Projeto> findByCoordenadorProjeto_Id(int coordenadorProjeto_id, Pageable pageable);
 
 }
