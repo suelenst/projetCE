@@ -17,6 +17,13 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
+import java.util.Date;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.PageRequest;
@@ -100,10 +107,41 @@ public class Pessoas {
 
     }
 
-
+    public static final String SEGREDO = "string grande para c*, usada como chave para assinatura! Sorvete";
+    
     @RequestMapping(path = "/pessoas/login", method = RequestMethod.GET)
-    public Pessoa login(@AuthenticationPrincipal PessoaAut pessoaAut) {
-        return pessoaAut.getPessoa();
+//    public Pessoa login(@AuthenticationPrincipal PessoaAut pessoaAut) {
+//        return pessoaAut.getPessoa();
+//    }
+    
+    public ResponseEntity<Pessoa> login(@AuthenticationPrincipal PessoaAut pessoaAut) 
+
+        throws IllegalArgumentException, UnsupportedEncodingException {
+
+        Algorithm algorithm = Algorithm.HMAC256(SEGREDO);
+
+        Calendar agora = Calendar.getInstance();
+
+        agora.add(Calendar.MINUTE, 4);
+
+        Date expira = agora.getTime();
+
+
+        String token = JWT.create()
+
+                .withClaim("id", pessoaAut.getPessoa().getId()).
+
+                withExpiresAt(expira).
+
+                sign(algorithm);
+
+        HttpHeaders respHeaders = new HttpHeaders();
+
+        respHeaders.set("token", token);
+
+
+        return new ResponseEntity<>(pessoaAut.getPessoa(), respHeaders, HttpStatus.OK);
+
     }
 
 

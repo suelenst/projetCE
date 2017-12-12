@@ -64,11 +64,14 @@ public class Projeto implements Serializable{
     @ManyToOne
     @JoinColumn(nullable = false)
     private Usuario coordenadorProjeto;
-    
-    
+        
      
     @ManyToMany
     private List<Usuario> integrantesProjeto;
+    
+    
+    @ManyToMany
+    private List<Usuario> solicitantesProjeto;      
     
     
          
@@ -154,7 +157,10 @@ public class Projeto implements Serializable{
     public void setDataDelecao(Date dataDelecao) {
         this.dataDelecao = dataDelecao;
     }
-
+    
+    public void setSolicitantesProjeto(List<Usuario> solicitantesProjeto) {
+        this.solicitantesProjeto = solicitantesProjeto;
+    }
     
     
     
@@ -201,6 +207,13 @@ public class Projeto implements Serializable{
     public Date getDataDelecao() {
         return dataDelecao;
     }
+
+
+    public List<Usuario> getSolicitantesProjeto() {
+        return solicitantesProjeto;
+    }
+
+
 
 
 

@@ -5,6 +5,9 @@
  */
 package br.edu.ifrs.restinga.ads.projetce;
 
+import br.edu.ifrs.restinga.ads.projetce.aut.TokenBasedAuthorizationFilter;
+import br.edu.ifrs.restinga.ads.projetce.dao.PessoaDAO;
+
 import br.edu.ifrs.restinga.ads.projetce.aut.DetailsService;
 import br.edu.ifrs.restinga.ads.projetce.controller.Pessoas;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +21,22 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.stereotype.Component;
 
-/**
- *
- * @author jezer
- */
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
 @Component
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     DetailsService detailsService;
+    
+    @Autowired
+    AuthenticationManager authenticationManager;
+        
+    @Autowired
+    PessoaDAO pessoaDAO;
+    
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(detailsService)
@@ -36,20 +45,22 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
     
     @Override
     public void configure(WebSecurity web) throws Exception {
-    web.ignoring().antMatchers(HttpMethod.POST,"/api/pessoas/");
-    web.ignoring().antMatchers(HttpMethod.POST,"/api/pessoas/**");
+//    web.ignoring().antMatchers(HttpMethod.POST,"/api/pessoas/");
+//    web.ignoring().antMatchers(HttpMethod.POST,"/api/pessoas/**");
     //web.ignoring().antMatchers(HttpMethod.POST,"/api/imgs/**");
 }
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/api/pessoas/").permitAll()
                 .antMatchers("/api/**").authenticated()
-                .and().httpBasic().and()
+                .and().httpBasic()
+                .and().
+                addFilterBefore(new TokenBasedAuthorizationFilter(authenticationManager, pessoaDAO)
+                        , BasicAuthenticationFilter.class)
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().csrf().disable();
-
-
     }
 }
