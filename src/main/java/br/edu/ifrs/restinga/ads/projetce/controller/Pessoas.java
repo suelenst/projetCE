@@ -92,8 +92,12 @@ public class Pessoas {
     @RequestMapping(path = "/pessoas/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void atualizar(@PathVariable int id, @RequestBody Pessoa pessoa) throws Exception {
-        if (pessoaDAO.exists(id)) {
+        if (pessoaDAO.exists(id)) {    
             pessoa.setId(id);
+            
+            Pessoa pessoaAnterior = pessoaDAO.findOne(id);            
+            pessoa.setSenha(pessoaAnterior.getSenha());
+            
             pessoaDAO.save(pessoa);
         }
     }
@@ -122,7 +126,7 @@ public class Pessoas {
 
         Calendar agora = Calendar.getInstance();
 
-        agora.add(Calendar.MINUTE, 4);
+        agora.add(Calendar.MINUTE, 15);
 
         Date expira = agora.getTime();
 
