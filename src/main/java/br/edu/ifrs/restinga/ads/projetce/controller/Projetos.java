@@ -1,8 +1,11 @@
 package br.edu.ifrs.restinga.ads.projetce.controller;
 
 import br.edu.ifrs.restinga.ads.projetce.dao.ProjetoDAO;
+import br.edu.ifrs.restinga.ads.projetce.dao.UsuarioDAO;
 import br.edu.ifrs.restinga.ads.projetce.modelo.Area;
 import br.edu.ifrs.restinga.ads.projetce.modelo.Projeto;
+import br.edu.ifrs.restinga.ads.projetce.modelo.Usuario;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,10 @@ public class Projetos {
 
     @Autowired
     ProjetoDAO projetoDAO;
+    
+    @Autowired
+    UsuarioDAO usuarioDAO;
+    
 
     @RequestMapping(path = "/projetos/pesquisar/nome", method = RequestMethod.GET)
     public Iterable<Projeto> pesquisaPorNome(
@@ -70,5 +77,24 @@ public class Projetos {
             projetoDAO.save(projeto);
         }
     }
+    
+    @RequestMapping(path = "/projetos/{id}/{idu}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public Projeto solicitarParticipacao(@PathVariable int id, @PathVariable int idu) throws Exception {
+        if (projetoDAO.exists(id) && usuarioDAO.exists(idu)) {
+            
+            Projeto projeto = projetoDAO.findOne(id); 
+            Usuario usuario = usuarioDAO.findOne(idu);
+            List<Usuario> lista = projeto.getSolicitantesProjeto();
+            lista.add(usuario);
+            
+            projeto.setSolicitantesProjeto(lista);
+     
+            return projetoDAO.save(projeto);
+        } else {
+            return new Projeto();
+        }        
+    }
+       
 
 }
