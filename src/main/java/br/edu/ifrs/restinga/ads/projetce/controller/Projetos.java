@@ -78,23 +78,103 @@ public class Projetos {
         }
     }
     
-    @RequestMapping(path = "/projetos/{id}/{idu}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/projetos/participa/{id}/{idu}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    public Projeto solicitarParticipacao(@PathVariable int id, @PathVariable int idu) throws Exception {
+    public void solicitaParticipacao(@PathVariable int id, @PathVariable int idu) throws Exception {
         if (projetoDAO.exists(id) && usuarioDAO.exists(idu)) {
             
             Projeto projeto = projetoDAO.findOne(id); 
             Usuario usuario = usuarioDAO.findOne(idu);
-            List<Usuario> lista = projeto.getSolicitantesProjeto();
-            lista.add(usuario);
             
-            projeto.setSolicitantesProjeto(lista);
-     
-            return projetoDAO.save(projeto);
-        } else {
-            return new Projeto();
-        }        
+            if ( projeto.getCoordenadorProjeto() != usuario && 
+                    !projeto.getSolicitantesProjeto().contains(usuario) &&
+                    !projeto.getIntegrantesProjeto().contains(usuario) ){
+            
+                List<Usuario> lista = projeto.getSolicitantesProjeto();
+                lista.add(usuario);
+
+                projeto.setSolicitantesProjeto(lista);
+
+                projetoDAO.save(projeto);
+                
+            } else {
+                throw new Exception("Não pode solicitar participação");
+            }
+            
+        }
+        
     }
+    
+    @RequestMapping(path = "/projetos/participa/{id}/{ids}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void negarSolicitaParticipacao(@PathVariable int id, @PathVariable int ids) throws Exception {
+        if (projetoDAO.exists(id) && usuarioDAO.exists(ids)) {
+            
+            Projeto projeto = projetoDAO.findOne(id); 
+            Usuario usuario = usuarioDAO.findOne(ids);
+            
+            if ( projeto.getSolicitantesProjeto().contains(usuario) ){
+            
+                List<Usuario> lista = projeto.getSolicitantesProjeto();
+                lista.remove(usuario);
+
+                projeto.setSolicitantesProjeto(lista);
+
+                projetoDAO.save(projeto);
+                
+            } else {
+                throw new Exception("Solicitação de participação não encontrada");
+            }
+            
+        }      
+    }
+    
+    
+    @RequestMapping(path = "/projetos/integrante/{id}/{ids}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public void incluiIntegrante(@PathVariable int id, @PathVariable int ids) throws Exception {
+        if (projetoDAO.exists(id) && usuarioDAO.exists(ids)) {
+            
+            Projeto projeto = projetoDAO.findOne(id); 
+            Usuario usuario = usuarioDAO.findOne(ids);
+            
+            if ( projeto.getCoordenadorProjeto() != usuario &&                    
+                    !projeto.getIntegrantesProjeto().contains(usuario) ){
+            
+                List<Usuario> lista = projeto.getIntegrantesProjeto();
+                lista.add(usuario);
+
+                projeto.setIntegrantesProjeto(lista);
+
+                
+                if ( projeto.getSolicitantesProjeto().contains(usuario) ){
+            
+                    List<Usuario> lista2 = projeto.getSolicitantesProjeto();
+                    lista2.remove(usuario);
+
+                    projeto.setSolicitantesProjeto(lista2);
+                }
+                
+                
+                projetoDAO.save(projeto);
+                
+            } else {
+                throw new Exception("Não pode integrar projeto");
+            }
+            
+        } else {
+                throw new Exception("Não encontrado");
+        }
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
        
 
 }
