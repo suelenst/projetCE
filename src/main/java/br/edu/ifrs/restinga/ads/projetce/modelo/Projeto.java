@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.Column;
  
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,8 +38,14 @@ public class Projeto implements Serializable{
     @Column(nullable = false, length=60)
     private String nome;     
     
-    @Lob
-    private byte[] imagem;
+    @Lob()
+    @Basic(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private byte[] foto;
+    
+    @JsonIgnore
+    private String tipoFoto;
+    
     
     @Column(nullable = false, length=400, columnDefinition="TEXT")
     private String resumo;
@@ -45,7 +53,14 @@ public class Projeto implements Serializable{
     @Column(nullable = false, columnDefinition="TEXT")
     private String descricao;
     
-    private byte[] arquivosAnexos;
+    @Lob()
+    @Basic(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private byte[] arquivoAnexo;
+    
+    @JsonIgnore
+    private String tipoArquivoAnexo;
+
     
     @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -101,10 +116,6 @@ public class Projeto implements Serializable{
             this.nome = nome;
     }
     
-    public void setImagem(byte[] imagem) {
-        this.imagem = imagem;
-    }
-
     public void setResumo(String resumo) throws Exception {
         if (resumo == null || resumo.isEmpty())
             throw new Exception("O campo resumo é de preenchimento obrigatório.");
@@ -113,9 +124,7 @@ public class Projeto implements Serializable{
         else 
             this.resumo = resumo;        
     }  
-    public void setArquivosAnexos(byte[] arquivosAnexos) {
-        this.arquivosAnexos = arquivosAnexos;
-    }
+
     public void setDescricao(String descricao) throws Exception {
         if (descricao == null || descricao.isEmpty())
             throw new Exception("O campo descrição é de preenchimento obrigatório.");
@@ -126,7 +135,7 @@ public class Projeto implements Serializable{
         if (areas == null || areas.isEmpty())
             throw new Exception("É necessário cadastrar pelo menos uma área de interesse");
         else 
-            this.areas = areas;
+            this.setAreas(areas);
     }
     public void setDataInicio(Date dataInicio) throws Exception {
         if (dataInicio == null)
@@ -161,7 +170,21 @@ public class Projeto implements Serializable{
     public void setSolicitantesProjeto(List<Usuario> solicitantesProjeto) {
         this.solicitantesProjeto = solicitantesProjeto;
     }
-    
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
+    }
+    public void setTipoFoto(String tipoFoto) {
+        this.tipoFoto = tipoFoto;
+    }
+    public void setArquivoAnexo(byte[] arquivoAnexo) {
+        this.arquivoAnexo = arquivoAnexo;
+    }
+    public void setTipoArquivoAnexo(String tipoArquivoAnexo) {
+        this.tipoArquivoAnexo = tipoArquivoAnexo;
+    }
+    public void setAreas(List<Area> areas) {
+        this.areas = areas;
+    }
     
     
  
@@ -171,18 +194,13 @@ public class Projeto implements Serializable{
     public String getNome() {
         return nome;
     }
-    public byte[] getImagem() {
-        return imagem;
-    }
     public String getResumo() {
         return resumo;
     }
     public String getDescricao() {
         return descricao;
     }
-    public byte[] getArquivosAnexos() {
-        return arquivosAnexos;
-    }
+
     public Date getDataInicio() {
         return dataInicio;
     }
@@ -190,7 +208,7 @@ public class Projeto implements Serializable{
         return dataFim;
     }
     public List<Area> getArea() {
-        return areas;
+        return getAreas();
     }
     public Usuario getCoordenadorProjeto() {
         return coordenadorProjeto;
@@ -207,19 +225,26 @@ public class Projeto implements Serializable{
     public Date getDataDelecao() {
         return dataDelecao;
     }
-
-
     public List<Usuario> getSolicitantesProjeto() {
         return solicitantesProjeto;
     }
+    public byte[] getFoto() {
+        return foto;
+    }
+    public String getTipoFoto() {
+        return tipoFoto;
+    }
+    public byte[] getArquivoAnexo() {
+        return arquivoAnexo;
+    }
+    public String getTipoArquivoAnexo() {
+        return tipoArquivoAnexo;
+    }
+    public List<Area> getAreas() {
+        return areas;
+    }
 
 
-
-
-
-
-    
-    
 
    
 }

@@ -20,6 +20,8 @@ import java.util.logging.Logger;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -169,7 +171,11 @@ public class Pessoas {
             throws IOException {
         Pessoa pessoa = pessoaDAO.findOne(id);
         if (pessoa.getFoto() == null) {
-            return ResponseEntity.notFound().build();
+                HttpHeaders respHeaders = new HttpHeaders();
+                respHeaders.setContentType(MediaType.valueOf("image/png"));
+                InputStreamResource img =
+                new InputStreamResource(new ByteArrayInputStream(Files.readAllBytes(Paths.get("sem.png"))));
+            return new ResponseEntity<InputStreamResource>(img, respHeaders, HttpStatus.OK);
         }
         HttpHeaders respHeaders = new HttpHeaders();
         respHeaders.setContentType(MediaType.valueOf(pessoa.getTipoFoto()));

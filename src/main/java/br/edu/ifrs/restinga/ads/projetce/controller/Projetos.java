@@ -3,13 +3,23 @@ package br.edu.ifrs.restinga.ads.projetce.controller;
 import br.edu.ifrs.restinga.ads.projetce.dao.ProjetoDAO;
 import br.edu.ifrs.restinga.ads.projetce.dao.UsuarioDAO;
 import br.edu.ifrs.restinga.ads.projetce.modelo.Area;
+import br.edu.ifrs.restinga.ads.projetce.modelo.Pessoa;
 import br.edu.ifrs.restinga.ads.projetce.modelo.Projeto;
 import br.edu.ifrs.restinga.ads.projetce.modelo.Usuario;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -169,7 +179,38 @@ public class Projetos {
     }
     
     
-    
+    @RequestMapping(path = "/projetos/{id}/foto", method = RequestMethod.POST)
+    public void inserirFoto(@PathVariable int id,
+                            @RequestParam("arquivo") MultipartFile uploadfiles) {
+        Projeto projeto = projetoDAO.findOne(id);
+
+        try {
+            projeto.setTipoFoto(uploadfiles.getContentType());
+            projeto.setFoto(uploadfiles.getBytes());
+            projetoDAO.save(projeto);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @RequestMapping(value = "/projetos/{id}/foto", method = RequestMethod.GET)
+    public ResponseEntity<InputStreamResource> recuperarFoto(@PathVariable int id)
+            throws IOException {
+        Projeto projeto = projetoDAO.findOne(id);
+        if (projeto.getFoto() == null) {
+                HttpHeaders respHeaders = new HttpHeaders();
+                respHeaders.setContentType(MediaType.valueOf("image/jpeg"));
+                InputStreamResource img =
+                new InputStreamResource(new ByteArrayInputStream(Files.readAllBytes(Paths.get("semImagem.jpeg"))));
+            return new ResponseEntity<InputStreamResource>(img, respHeaders, HttpStatus.OK);
+        }
+        HttpHeaders respHeaders = new HttpHeaders();
+        respHeaders.setContentType(MediaType.valueOf(projeto.getTipoFoto()));
+        InputStreamResource img =
+                new InputStreamResource(new ByteArrayInputStream(projeto.getFoto()));
+        return new ResponseEntity<InputStreamResource>(img, respHeaders, HttpStatus.OK);
+    }    
     
     
     
