@@ -65,15 +65,15 @@ public class Projeto implements Serializable{
     @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private Date dataInicio;
+    private Date dataInicio = new Date(System.currentTimeMillis());;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date dataFim;
     
          
-    @OneToMany
-    private List<Area> areas;    
+
+    private Area area;    
     
     
     @ManyToOne
@@ -131,12 +131,7 @@ public class Projeto implements Serializable{
         else 
             this.descricao = descricao;
     }
-    public void setArea(List<Area> areas) throws Exception {
-        if (areas == null || areas.isEmpty())
-            throw new Exception("É necessário cadastrar pelo menos uma área de interesse");
-        else 
-            this.setAreas(areas);
-    }
+
     public void setDataInicio(Date dataInicio) throws Exception {
         if (dataInicio == null)
             throw new Exception("Data de inicio é de preenchimento obrigatório.");
@@ -182,8 +177,8 @@ public class Projeto implements Serializable{
     public void setTipoArquivoAnexo(String tipoArquivoAnexo) {
         this.tipoArquivoAnexo = tipoArquivoAnexo;
     }
-    public void setAreas(List<Area> areas) {
-        this.areas = areas;
+    public void setArea(Area area) {
+        this.area = area;
     }
     
     
@@ -207,9 +202,7 @@ public class Projeto implements Serializable{
     public Date getDataFim() {
         return dataFim;
     }
-    public List<Area> getArea() {
-        return getAreas();
-    }
+
     public Usuario getCoordenadorProjeto() {
         return coordenadorProjeto;
     }
@@ -240,8 +233,8 @@ public class Projeto implements Serializable{
     public String getTipoArquivoAnexo() {
         return tipoArquivoAnexo;
     }
-    public List<Area> getAreas() {
-        return areas;
+    public Area getArea() {
+        return area;
     }
 
 

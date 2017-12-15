@@ -55,7 +55,7 @@ public class Pessoas {
 
     @RequestMapping(path = "/pessoas", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public Pessoa inserir(@AuthenticationPrincipal PessoaAut pessoaAut, @RequestBody Pessoa pessoa) throws Exception {
+    public Pessoa inserir( @RequestBody Pessoa pessoa) throws Exception {
         pessoa.setId(0);
         pessoa.setSenha(PASSWORD_ENCODER.encode(pessoa.getNovaSenha()));
 
@@ -75,10 +75,16 @@ public class Pessoas {
     PessoaDAO pessoaDAO;
 
     //    @PreAuthorize("hasAuthority('administrador')")
+    
     @RequestMapping(path = "/pessoas", method = RequestMethod.GET)
-    public Iterable<Pessoa> listar(@RequestParam(required = false, defaultValue = "0") int pagina) {
-        PageRequest pageRequest = new PageRequest(pagina, 5);
-        return pessoaDAO.findAll(pageRequest);
+    public Iterable<Pessoa> listar(@AuthenticationPrincipal PessoaAut pessoaAut, @RequestParam(required = false, defaultValue = "0") int pagina) {
+        if ( pessoaAut.getPessoa().getPermissoes().contains("administrador")){
+                PageRequest pageRequest = new PageRequest(pagina, 5);
+                return pessoaDAO.findAll(pageRequest);
+        } else {
+            throw new ForbiddenException("Acesso somente de administrador!");
+        }
+
     }
 
     @RequestMapping(path = "/pessoas/{id}", method = RequestMethod.GET)
@@ -106,9 +112,13 @@ public class Pessoas {
 
     @RequestMapping(path = "/pessoas/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
-    public void apagar(@PathVariable int id) {
-        if (pessoaDAO.exists(id)) {
-            pessoaDAO.delete(id);
+    public void apagar(@AuthenticationPrincipal PessoaAut pessoaAut, @PathVariable int id) {
+        if ( pessoaAut.getPessoa().getPermissoes().contains("administrador")){
+            if (pessoaDAO.exists(id)) {
+                pessoaDAO.delete(id);
+            }
+        } else {
+            throw new ForbiddenException("Acesso somente de administrador!");
         }
 
     }
@@ -152,36 +162,48 @@ public class Pessoas {
 
 
     @RequestMapping(path = "/pessoas/{id}/foto", method = RequestMethod.POST)
-    public void inserirFoto(@PathVariable int id,
+    public void inserirFoto(@AuthenticationPrincipal PessoaAut pessoaAut, @PathVariable int id,
                             @RequestParam("arquivo") MultipartFile uploadfiles) {
-        Pessoa pessoa = pessoaDAO.findOne(id);
+        
+        if (pessoaAut.getPessoa().getId() == id
+            || pessoaAut.getPessoa().getPermissoes().contains("administrador")) {
 
-        try {
-            pessoa.setTipoFoto(uploadfiles.getContentType());
-            pessoa.setFoto(uploadfiles.getBytes());
-            pessoaDAO.save(pessoa);
+            Pessoa pessoa = pessoaDAO.findOne(id);
 
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            try {
+                pessoa.setTipoFoto(uploadfiles.getContentType());
+                pessoa.setFoto(uploadfiles.getBytes());
+                pessoaDAO.save(pessoa);
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            throw new ForbiddenException("Não é permitido acessar dados de outro usuários");
         }
     }
 
     @RequestMapping(value = "/pessoas/{id}/foto", method = RequestMethod.GET)
-    public ResponseEntity<InputStreamResource> recuperarFoto(@PathVariable int id)
+    public ResponseEntity<InputStreamResource> recuperarFoto(@AuthenticationPrincipal PessoaAut pessoaAut, @PathVariable int id)
             throws IOException {
-        Pessoa pessoa = pessoaDAO.findOne(id);
-        if (pessoa.getFoto() == null) {
-                HttpHeaders respHeaders = new HttpHeaders();
-                respHeaders.setContentType(MediaType.valueOf("image/png"));
-                InputStreamResource img =
-                new InputStreamResource(new ByteArrayInputStream(Files.readAllBytes(Paths.get("sem.png"))));
+            
+        
+            Pessoa pessoa = pessoaDAO.findOne(id);
+            if (pessoa.getFoto() == null) {
+                    HttpHeaders respHeaders = new HttpHeaders();
+                    respHeaders.setContentType(MediaType.valueOf("image/png"));
+                    InputStreamResource img =
+                    new InputStreamResource(new ByteArrayInputStream(Files.readAllBytes(Paths.get("sem.png"))));
+                return new ResponseEntity<InputStreamResource>(img, respHeaders, HttpStatus.OK);
+            }
+            HttpHeaders respHeaders = new HttpHeaders();
+            respHeaders.setContentType(MediaType.valueOf(pessoa.getTipoFoto()));
+            InputStreamResource img =
+                    new InputStreamResource(new ByteArrayInputStream(pessoa.getFoto()));
             return new ResponseEntity<InputStreamResource>(img, respHeaders, HttpStatus.OK);
-        }
-        HttpHeaders respHeaders = new HttpHeaders();
-        respHeaders.setContentType(MediaType.valueOf(pessoa.getTipoFoto()));
-        InputStreamResource img =
-                new InputStreamResource(new ByteArrayInputStream(pessoa.getFoto()));
-        return new ResponseEntity<InputStreamResource>(img, respHeaders, HttpStatus.OK);
+            
+        
+    
     }
 
 }

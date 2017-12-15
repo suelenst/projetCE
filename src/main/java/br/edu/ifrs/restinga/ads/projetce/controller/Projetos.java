@@ -1,5 +1,8 @@
 package br.edu.ifrs.restinga.ads.projetce.controller;
 
+import br.edu.ifrs.restinga.ads.projetce.aut.ForbiddenException;
+import br.edu.ifrs.restinga.ads.projetce.aut.PessoaAut;
+import br.edu.ifrs.restinga.ads.projetce.dao.AreaDAO;
 import br.edu.ifrs.restinga.ads.projetce.dao.ProjetoDAO;
 import br.edu.ifrs.restinga.ads.projetce.dao.UsuarioDAO;
 import br.edu.ifrs.restinga.ads.projetce.modelo.Area;
@@ -18,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +34,9 @@ public class Projetos {
     
     @Autowired
     UsuarioDAO usuarioDAO;
+    
+    @Autowired
+    AreaDAO areaDAO;
     
 
     @RequestMapping(path = "/projetos/pesquisar/nome", method = RequestMethod.GET)
@@ -67,8 +74,33 @@ public class Projetos {
     @RequestMapping(path = "/projetos", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public Projeto inserir(@RequestBody Projeto projeto) throws Exception {
-        projeto.setId(0);
-        return projetoDAO.save(projeto);
+            int idArea = 1;
+        
+            if (projeto.getArea() != null ){
+               idArea = projeto.getArea().getId();  
+            } 
+        
+            int idCoord = projeto.getCoordenadorProjeto().getId();
+            
+            
+            
+            
+            if( usuarioDAO.exists(idCoord) && areaDAO.exists(idArea)){
+                Usuario coordenador = usuarioDAO.findOne(idCoord);      
+                Area area = areaDAO.findOne(idArea);
+                projeto.setId(0);
+                projeto.setCoordenadorProjeto(coordenador);
+                projeto.setArea(area);
+
+                return projetoDAO.save(projeto); 
+                
+                
+            } else {
+                throw new Exception("Erro");
+            }
+
+       
+
     }
 
     @RequestMapping(path = "/projetos/{id}", method = RequestMethod.DELETE)
