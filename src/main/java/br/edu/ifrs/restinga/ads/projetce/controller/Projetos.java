@@ -74,11 +74,17 @@ public class Projetos {
     @RequestMapping(path = "/projetos", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public Projeto inserir(@RequestBody Projeto projeto) throws Exception {
-            int idArea = 1;
-        
+            Area a = new Area();
+            a.setId(0);
+            a.setNome("Outra");
+            a = areaDAO.save(a);
+            int idArea;
+
             if (projeto.getArea() != null ){
-               idArea = projeto.getArea().getId();  
-            } 
+               idArea = projeto.getArea().getId();
+            } else {
+                idArea = a.getId();
+            }
         
             int idCoord = projeto.getCoordenadorProjeto().getId();
             
