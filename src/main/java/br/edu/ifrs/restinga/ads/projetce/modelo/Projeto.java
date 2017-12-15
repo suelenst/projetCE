@@ -94,9 +94,9 @@ public class Projeto implements Serializable{
     private List<Atividade> atividades;    
     
     
-    @JsonIgnore  
-    @OneToMany(mappedBy = "projeto", orphanRemoval=true)      //se for o caso de remover eventos quando o projeto for removido
-    private List<Evento> eventos;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "projeto", orphanRemoval=true)      //se for o caso de remover eventos quando o projeto for removido
+//    private List<Evento> eventos;
 
 
     
@@ -154,9 +154,9 @@ public class Projeto implements Serializable{
     public void setAtividades(List<Atividade> atividades) {
         this.atividades = atividades;
     }
-    public void setEventos(List<Evento> eventos) {
-        this.eventos = eventos;
-    }
+//    public void setEventos(List<Evento> eventos) {
+//        this.eventos = eventos;
+//    }
 
     public void setDataDelecao(Date dataDelecao) {
         this.dataDelecao = dataDelecao;
@@ -212,9 +212,9 @@ public class Projeto implements Serializable{
     public List<Atividade> getAtividades() {
         return atividades;
     }
-    public List<Evento> getEventos() {
-        return eventos;
-    }
+//    public List<Evento> getEventos() {
+//        return eventos;
+//    }
     public Date getDataDelecao() {
         return dataDelecao;
     }
